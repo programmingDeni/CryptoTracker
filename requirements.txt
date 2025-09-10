@@ -1,0 +1,42 @@
+1. Die Anwendung soll eine Web-App sein, bestehend aus Frontend und Java Spring Boot Backend. 
+2. Das Backend soll eine Datenbank verwalten, in der Kryptowährungen (Coins) gespeichert werden. 
+3. User sollen im Frontend auswählen können, welche Coins sie verfolgen möchten. 
+4. Die Auswahl der Coins wird im Backend persistiert (gespeichert). 
+5. Das Backend soll aktuelle Kursdaten zu den ausgewählten Coins von einer externen Crypto-API (z.B. CoinGecko) abrufen können. 
+6. Das Frontend soll die gespeicherten Coins und deren Kursdaten visualisieren. 
+7. Die Kommunikation zwischen Frontend und Backend erfolgt über eine REST-API. 
+8. (Optional) User-Authentifizierung, falls mehrere Nutzer ihre eigenen Coin-Listen verwalten sollen.
+
+Technische Anforderungen – Crypto Web App mit Java Spring Boot Backend
+
+1. Backend:
+ - Java mit Spring Boot Framework
+ - Bereitstellung einer REST-API für das Frontend
+ - Persistenzschicht mit JPA/Hibernate
+ - Anbindung an eine relationale Datenbank (z.B. PostgreSQL, MySQL, H2)
+ - Entity für Coin (mind. Name, Symbol, ggf. externe ID)
+ - Repository für CRUD-Operationen auf Coins
+ - Service für Geschäftslogik (Coins verwalten, externe API abfragen)
+ - Integration einer externen Crypto-API (z.B. CoinGecko) für Kursdaten
+ - (Optional) User-Authentifizierung mit Spring Security
+
+2. Frontend:
+ - Kommuniziert über REST-API mit dem Backend
+ - Visualisierung der gespeicherten Coins und deren Kursdaten
+ - UI für Auswahl und Verwaltung der zu verfolgenden Coins
+
+3. Allgemein:
+ - Trennung von Frontend und Backend (z.B. in eigenen Ordnern)
+ - Konfiguration über .env/application.properties (z.B. DB-Zugang, API-Keys)
+ - (Optional) Docker-Setup für lokale Entwicklung
+
+
+Methode	    Route	                Beschreibung
+GET	        /api/coins	            Liste aller verfügbaren Coins
+POST	    /api/coins	            Coin zur Watchlist hinzufügen
+DELETE	    /api/coins/{id}	        Coin von der Watchlist entfernen
+GET	        /api/coins/watchlist	Coins in der eigenen Watchlist anzeigen
+GET	        /api/coins/{id}/history	Kursverlauf eines Coins abrufen
+GET	        /api/coins/{id}/current	Aktuellen Kurs eines Coins abrufen
+POST	    /api/users/register	    (Optional) Neuen User registrieren
+POST	    /api/users/login	    (Optional) User-Login
