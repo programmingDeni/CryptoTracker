@@ -21,6 +21,9 @@ import java.util.List;
 //COIN
 //Service
 import com.crypto.tracker.services.CoinService;
+
+import io.swagger.v3.oas.annotations.Parameter;
+
 //Model
 import com.crypto.tracker.model.Coin;
 
@@ -60,13 +63,13 @@ public class CoinController {
 
     // Kursverlauf eines Coins abrufen
     @GetMapping("/{id}/history")
-    public String getCoinHistory() {
+    public String getCoinHistory(@Parameter(description = "Coin ID") @PathVariable String id) {
         return "";
     }
 
     // Aktuellen Kurs eines Coins abrufen
     @GetMapping("/{id}/current")
-    public String getCoinCurrent() {
+    public String getCoinCurrent(@Parameter(description = "Coin ID") @PathVariable String id) {
         return "";
     }
 

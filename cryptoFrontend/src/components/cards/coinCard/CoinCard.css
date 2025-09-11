@@ -1,0 +1,13 @@
+.coin-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin: 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.coin-card:hover {
+  background: #425077;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
