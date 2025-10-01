@@ -26,9 +26,11 @@ public class Coin {
      * public BigDecimal ath;
      */
 
+    // ID ist nur meine Locale Id um Coins eindeutig zu persistieren
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+    // Symbol ist die "ID" von CoinGecko, e.g. "btc","eth"
     private String symbol;
     private String name;
     private String image;

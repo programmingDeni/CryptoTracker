@@ -3,7 +3,6 @@ package com.crypto.tracker.services;
 //Annotations
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -67,5 +66,17 @@ public class CoinGeckoService {
     }
 
     // TODO: GET Price Historien von CoinGecko
+    public String getCoinHistory(String coinId, String vsCurrency, int days) {
+        String url = BASE_URL + "/coins/" + coinId + "/market_chart?vs_currency=" + vsCurrency + "&days=" + days;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-cg-demo-api-key", apiKey);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
 
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                String.class);
+        return response.getBody();
+    }
 }

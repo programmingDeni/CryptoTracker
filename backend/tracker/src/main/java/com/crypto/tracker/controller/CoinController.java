@@ -50,7 +50,7 @@ public class CoinController {
 
     // Coin von der Watchlist entfernen
     @DeleteMapping
-    public String removeCoin(@PathVariable Integer id) {
+    public String removeCoin(@PathVariable Long id) {
         coinService.removeCoin(id);
         return "Coin removed";
     }
@@ -63,8 +63,8 @@ public class CoinController {
 
     // Kursverlauf eines Coins abrufen
     @GetMapping("/{id}/history")
-    public String getCoinHistory(@Parameter(description = "Coin ID") @PathVariable String id) {
-        return "";
+    public String getCoinHistory(@Parameter(description = "Coin ID") @PathVariable Long id) {
+        return coinService.getCoinHistory(id);
     }
 
     // Aktuellen Kurs eines Coins abrufen

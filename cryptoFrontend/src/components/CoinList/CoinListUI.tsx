@@ -8,7 +8,7 @@ interface CoinListUIProps {
 export default function CoinListUI({ coins, onSelectCoin }: CoinListUIProps) {
   return (
     <div>
-      <ul style={{ listStyle: "none", padding: "10px 10px", margin: 10 }}>
+      <ul style={{ listStyle: "none", paddingLeft: "0px" }}>
         {coins.map((coin) => (
           <li
             key={coin.id}
