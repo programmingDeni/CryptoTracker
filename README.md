@@ -8,7 +8,7 @@ Detailansicht für einzelne Coins
 Datenaktualisierung über die CoinGecko API
 Moderne UI mit React, React Query und flexibler Komponentenstruktur
 ## Projektstruktur
-...
+```
 CryptoTracker/ ├── backend/ # Spring Boot Backend (Java) │ 
                 └── tracker/  
                   └── src/ │ 
@@ -23,7 +23,7 @@ CryptoTracker/ ├── backend/ # Spring Boot Backend (Java) │
                   └── services/
                   └── utils/
                   └── views/ 
-...
+```
 
 ## Setup & Entwicklung
 ### Backend (Spring Boot)
