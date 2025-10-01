@@ -24,7 +24,8 @@ public class CoinGeckoToCoinMapper {
         coin.setImage(dto.image);
         coin.setCurrentPrice(dto.current_price);
         coin.setMarketCap(dto.market_cap);
-        coin.setPriceChange24hPerCent(dto.price_change_24h_per_cent);
+        coin.setPriceChange24hPerCent(dto.priceChange24hPerCent);
+
         coin.setAth(dto.ath);
 
         return coin;
