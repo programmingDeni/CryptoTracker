@@ -9,11 +9,20 @@ Datenaktualisierung über die CoinGecko API
 Moderne UI mit React, React Query und flexibler Komponentenstruktur
 ## Projektstruktur
 ```
-CryptoTracker/ ├── backend/ # Spring Boot Backend (Java) │ 
-                └── tracker/  
+CryptoTracker/ ├── backend/tracker/src/main/java/com/crypto/tracker/ # Spring Boot Backend (Java) │  
                   └── src/ │ 
-                    └── main/ 
-                    └── test/ 
+                    └── main/
+                      ├── CryptoTrackerApplication.java
+                      ├── config/ 
+                        └── CoinDataInitializer.java 
+                      ├── controller/ 
+                      ├── dto/ 
+                      ├── mapper/ 
+                      ├── model/ 
+                      ├── repository/
+                      ├── services/ 
+                      
+                    backend/tracker/src/main/java/com/crypto/tracker/ ├── CryptoTrackerApplication.java 
               ├── cryptoFrontend/ # React Frontend (TypeScript)  
                 └── src/ 
                   └── api/ # Automatisch generierte API-Types (OpenAPI)
@@ -24,6 +33,7 @@ CryptoTracker/ ├── backend/ # Spring Boot Backend (Java) │
                   └── utils/
                   └── views/ 
 ```
+
 
 ## Setup & Entwicklung
 ### Backend (Spring Boot)
