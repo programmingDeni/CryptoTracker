@@ -1,13 +1,14 @@
-#CryptoTracker (work in progress)
+# CryptoTracker (work in progress)
 CryptoTracker ist eine Fullstack-Anwendung zum Anzeigen und Verwalten von Kryptowährungen. Das Projekt besteht aus einem Java Spring Boot Backend und einem modernen React/TypeScript Frontend.
 
-### Features
+## Features
 Übersicht der wichtigsten Kryptowährungen mit aktuellen Kursen und Marktdaten
 Responsive Design: Optimiert für Desktop und Mobile
 Detailansicht für einzelne Coins
 Datenaktualisierung über die CoinGecko API
 Moderne UI mit React, React Query und flexibler Komponentenstruktur
-Projektstruktur
+## Projektstruktur
+...
 CryptoTracker/ ├── backend/ # Spring Boot Backend (Java) │ 
                 └── tracker/  
                   └── src/ │ 
@@ -15,13 +16,17 @@ CryptoTracker/ ├── backend/ # Spring Boot Backend (Java) │
                     └── test/ 
               ├── cryptoFrontend/ # React Frontend (TypeScript)  
                 └── src/ 
-                  └── components/ 
-                  └── queries/ 
-                  └── views/ 
                   └── api/ # Automatisch generierte API-Types (OpenAPI)
+                  └── assets/ 
+                  └── components/
+                  └── queries/ 
+                  └── services/
+                  └── utils/
+                  └── views/ 
+...
 
-Setup & Entwicklung
-Backend (Spring Boot)
+## Setup & Entwicklung
+### Backend (Spring Boot)
 Voraussetzungen: Java 17+, Maven
 Konfiguration:
 Lege eine Datei application-secret.properties mit deinen DB- und API-Zugangsdaten an.
