@@ -21,8 +21,7 @@ CryptoTracker/ ├── backend/tracker/src/main/java/com/crypto/tracker/ # Spr
                       ├── model/ 
                       ├── repository/
                       ├── services/ 
-                      
-                    backend/tracker/src/main/java/com/crypto/tracker/ ├── CryptoTrackerApplication.java 
+                   
               ├── cryptoFrontend/ # React Frontend (TypeScript)  
                 └── src/ 
                   └── api/ # Automatisch generierte API-Types (OpenAPI)
