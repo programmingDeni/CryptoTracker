@@ -1,6 +1,8 @@
 next steps
 unix timestamp zu human readable umwandeln 
 
-frontend muss die historien abrufen 
+frontend muss die historien abrufen (done)
 
-dazu backend route mit interner id rufen 
+dazu backend route mit interner id rufen (done)
+
+brauchen jetzt längere historie von daten (1-2 kjahre) 

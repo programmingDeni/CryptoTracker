@@ -61,7 +61,7 @@ public class CoinService {
         }
     }
 
-    public String getCoinHistory(Long coinId) {
+    public List<CoinPriceHistory> getCoinHistory(Long coinId) {
         // coin id in symbol umwandeln
         Coin coin = coinRepository.findById(coinId)
                 .orElseThrow(() -> new RuntimeException("Coin not found with id: " + coinId));
@@ -71,7 +71,7 @@ public class CoinService {
         if (!history.isEmpty()) {
             // Falls ja, gib sie als JSON zurück
             try {
-                return CoinPriceHistoryMapper.toDto(history);
+                return (history);
             } catch (Exception e) {
                 throw new RuntimeException("Fehler beim Serialisieren der Preis-Historie", e);
             }
@@ -109,7 +109,7 @@ public class CoinService {
         List<CoinPriceHistory> savedHistory = coinPriceHistoryRepository.findBySymbol(coin.getSymbol());
         try {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(savedHistory);
+            return (savedHistory);
         } catch (Exception e) {
             throw new RuntimeException("Fehler beim Serialisieren der Preis-Historie", e);
         }

@@ -22,10 +22,18 @@ import java.util.List;
 //Service
 import com.crypto.tracker.services.CoinService;
 
+import io.swagger.v3.oas.annotations.Operation;
+//OpenAPI / Swagger
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 //Model
 import com.crypto.tracker.model.Coin;
+import com.crypto.tracker.model.CoinPriceHistory;
 
 @RestController
 @RequestMapping("/api/coins")
@@ -62,8 +70,13 @@ public class CoinController {
     }
 
     // Kursverlauf eines Coins abrufen
+
     @GetMapping("/{id}/history")
-    public String getCoinHistory(@Parameter(description = "Coin ID") @PathVariable Long id) {
+    @Operation(summary = "Kursverlauf eines Coins abrufen")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coin history as JSON", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CoinPriceHistory.class))))
+    })
+    public List<CoinPriceHistory> getCoinHistory(@Parameter(description = "Coin ID") @PathVariable Long id) {
         return coinService.getCoinHistory(id);
     }
 

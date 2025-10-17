@@ -78,6 +78,61 @@ export interface Coin {
      */
     'ath'?: number;
 }
+/**
+ * 
+ * @export
+ * @interface CoinPriceHistory
+ */
+export interface CoinPriceHistory {
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CoinPriceHistory
+     */
+    'symbol'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'timestamp'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'price'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'market_cap'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'total_volume'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'marketCap'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
+    'totalVolume'?: number;
+}
 
 /**
  * CoinControllerApi - axios parameter creator
@@ -155,11 +210,12 @@ export const CoinControllerApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {string} id Coin ID
+         * @summary Kursverlauf eines Coins abrufen
+         * @param {number} id Coin ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoinHistory: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCoinHistory: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getCoinHistory', 'id', id)
             const localVarPath = `/api/coins/{id}/history`
@@ -309,11 +365,12 @@ export const CoinControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id Coin ID
+         * @summary Kursverlauf eines Coins abrufen
+         * @param {number} id Coin ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCoinHistory(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async getCoinHistory(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CoinPriceHistory>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCoinHistory(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CoinControllerApi.getCoinHistory']?.[localVarOperationServerIndex]?.url;
@@ -382,11 +439,12 @@ export const CoinControllerApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
-         * @param {string} id Coin ID
+         * @summary Kursverlauf eines Coins abrufen
+         * @param {number} id Coin ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoinHistory(id: string, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+        getCoinHistory(id: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<CoinPriceHistory>> {
             return localVarFp.getCoinHistory(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -447,12 +505,13 @@ export class CoinControllerApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} id Coin ID
+     * @summary Kursverlauf eines Coins abrufen
+     * @param {number} id Coin ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoinControllerApi
      */
-    public getCoinHistory(id: string, options?: RawAxiosRequestConfig) {
+    public getCoinHistory(id: number, options?: RawAxiosRequestConfig) {
         return CoinControllerApiFp(this.configuration).getCoinHistory(id, options).then((request) => request(this.axios, this.basePath));
     }
 

@@ -1,5 +1,7 @@
 package com.crypto.tracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +19,7 @@ public class CoinPriceHistory {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "coin_id", nullable = false)
+    @JsonIgnore
     private Coin coin;
     private String symbol;
     private long timestamp;
