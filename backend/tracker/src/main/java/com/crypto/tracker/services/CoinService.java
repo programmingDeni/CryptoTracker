@@ -1,24 +1,18 @@
 package com.crypto.tracker.services;
 
-//Annotations
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-//Java Utils
 import java.util.List;
-//Dtos 
+
 import com.crypto.tracker.dto.CoinGeckoCoinDto;
-//Mapper
-import com.crypto.tracker.mapper.CoinPriceHistoryMapper;
+import com.crypto.tracker.enums.TimeInterval;
 import com.crypto.tracker.mapper.CoinGeckoToCoinMapper;
-//Model
 import com.crypto.tracker.model.Coin;
 import com.crypto.tracker.model.CoinPriceHistory;
-//Repository
 import com.crypto.tracker.repos.CoinRepository;
+import com.crypto.tracker.security.SecurityUtils;
 import com.crypto.tracker.repos.CoinPriceHistoryRepository;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -33,7 +27,10 @@ public class CoinService {
     @Autowired
     private CoinPriceHistoryRepository coinPriceHistoryRepository;
 
-    public Coin getCoin(Long id) {
+    @Autowired
+    private PriceHistorySchedulerService priceHistorySchedulerService;
+
+    public Coin getCoin(Integer id) {
         return coinRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Coin not found with id: " + id));
     }
@@ -46,7 +43,7 @@ public class CoinService {
         return coinRepository.save(coin);
     }
 
-    public void removeCoin(Long id) {
+    public void removeCoin(Integer id) {
         coinRepository.deleteById(id);
     }
 
@@ -55,64 +52,49 @@ public class CoinService {
         ObjectMapper mapper = new ObjectMapper();
         CoinGeckoCoinDto[] dtos = mapper.readValue(json, CoinGeckoCoinDto[].class);
 
+        Integer userId = SecurityUtils.getCurrentUserId();
+
         for (CoinGeckoCoinDto dto : dtos) {
             Coin coin = CoinGeckoToCoinMapper.fromDto(dto);
+            coin.setUserId(userId);
             coinRepository.save(coin);
         }
     }
 
-    public List<CoinPriceHistory> getCoinHistory(Long coinId) {
-        // coin id in symbol umwandeln
+    /**
+     * Holt Preishistorie aus der DB für ein bestimmtes Zeitintervall.
+     * Kein API-Call - Daten werden vom Scheduler befüllt.
+     */
+    public List<CoinPriceHistory> getCoinHistory(Integer coinId, TimeInterval interval) {
         Coin coin = coinRepository.findById(coinId)
                 .orElseThrow(() -> new RuntimeException("Coin not found with id: " + coinId));
-        // Prüfe, ob Historie schon in der DB ist
-        List<CoinPriceHistory> history = coinPriceHistoryRepository.findBySymbol(coin.getSymbol());
-        // wenn history nicht leer ist, gib es als json zurück
-        if (!history.isEmpty()) {
-            // Falls ja, gib sie als JSON zurück
-            try {
-                return (history);
-            } catch (Exception e) {
-                throw new RuntimeException("Fehler beim Serialisieren der Preis-Historie", e);
-            }
+
+        // Berechne den Timestamp ab dem wir Daten wollen
+        long fromTimestamp = calculateFromTimestamp(interval);
+
+        // Hole gefilterte Daten aus der DB
+        List<CoinPriceHistory> history = coinPriceHistoryRepository.findByCoinAndTimestampAfter(coin, fromTimestamp);
+        if (history.isEmpty()) {
+            // Falls keine Daten vorhanden sind, hole von CoinGecko
+            priceHistorySchedulerService.initialImport(coin);
+            history = coinPriceHistoryRepository.findByCoinAndTimestampAfter(coin, fromTimestamp);
         }
+        return history;
+    }
 
-        // Falls nicht, hole von CoinGecko
-        String json = coinGeckoService.getCoinHistory(coin.getName().toLowerCase(), "usd", 30);
+    /**
+     * Berechnet den Start-Timestamp basierend auf dem Interval.
+     */
+    private long calculateFromTimestamp(TimeInterval interval) {
+        long now = System.currentTimeMillis();
 
-        // Parse und speichere in DB
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(json);
-
-            JsonNode prices = root.get("prices");
-            JsonNode marketCaps = root.get("market_caps");
-            JsonNode volumes = root.get("total_volumes");
-            List<CoinPriceHistory> entities = new ArrayList<>();
-            for (int i = 0; i < prices.size(); i++) {
-                long timestamp = prices.get(i).get(0).asLong();
-                double price = prices.get(i).get(1).asDouble();
-                double marketCap = marketCaps.get(i).get(1).asDouble();
-                double volume = volumes.get(i).get(1).asDouble();
-
-                CoinPriceHistory entity = new CoinPriceHistory(coin, coin.getSymbol(), timestamp, price,
-                        marketCap, volume);
-                entities.add(entity);
-            }
-            coinPriceHistoryRepository.saveAll(entities);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Fehler beim Verarbeiten der CoinGecko-Historie", e);
-        }
-
-        // Gib die frisch gespeicherte Historie zurück
-        List<CoinPriceHistory> savedHistory = coinPriceHistoryRepository.findBySymbol(coin.getSymbol());
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return (savedHistory);
-        } catch (Exception e) {
-            throw new RuntimeException("Fehler beim Serialisieren der Preis-Historie", e);
-        }
-
+        return switch (interval) {
+            case HOUR_1 -> now - (60 * 60 * 1000L); // 1 Stunde
+            case HOURS_24 -> now - (24 * 60 * 60 * 1000L); // 24 Stunden
+            case DAYS_7 -> now - (7 * 24 * 60 * 60 * 1000L); // 7 Tage
+            case DAYS_30 -> now - (30L * 24 * 60 * 60 * 1000L); // 30 Tage
+            case YEAR_1 -> now - (365L * 24 * 60 * 60 * 1000L); // 1 Jahr
+            case MAX -> 0L; // Alle Daten
+        };
     }
 }

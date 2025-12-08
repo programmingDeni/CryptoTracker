@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: coindata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-admin123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    env_file:
+      - .env
+    build:
+      context: ./backend/tracker
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/coindata
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ./backend/tracker/src:/app/src:ro
+      - ./backend/tracker/pom.xml:/app/pom.xml:ro
+
+  frontend:
+    build:
+      context: ./cryptoFrontend
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./cryptoFrontend/src:/app/src
+      - ./cryptoFrontend/index.html:/app/index.html
+      - ./cryptoFrontend/vite.config.ts:/app/vite.config.ts
+
+volumes:
+  postgres_data:
