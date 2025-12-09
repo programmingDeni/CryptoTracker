@@ -1,3 +1,5 @@
+<img width="1918" height="928" alt="grafik" src="https://github.com/user-attachments/assets/3e4c0f2e-6096-493b-845c-f57e1355500d" />
+
 # CryptoTracker (work in progress)
 CryptoTracker ist eine Fullstack-Anwendung zum Anzeigen und Verwalten von Kryptowährungen. Das Projekt besteht aus einem Java Spring Boot Backend und einem modernen React/TypeScript Frontend.
 
