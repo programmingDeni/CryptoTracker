@@ -3,6 +3,7 @@ package com.crypto.tracker.controller;
 //Annotation Imports 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 //Autowired
 import org.springframework.beans.factory.annotation.Autowired;
 // Get, Post und Delete Mappings
@@ -22,10 +23,19 @@ import java.util.List;
 //Service
 import com.crypto.tracker.services.CoinService;
 
+import io.swagger.v3.oas.annotations.Operation;
+//OpenAPI / Swagger
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import com.crypto.tracker.enums.TimeInterval;
 //Model
 import com.crypto.tracker.model.Coin;
+import com.crypto.tracker.model.CoinPriceHistory;
 
 @RestController
 @RequestMapping("/api/coins")
@@ -50,7 +60,7 @@ public class CoinController {
 
     // Coin von der Watchlist entfernen
     @DeleteMapping
-    public String removeCoin(@PathVariable Long id) {
+    public String removeCoin(@PathVariable Integer id) {
         coinService.removeCoin(id);
         return "Coin removed";
     }
@@ -62,9 +72,15 @@ public class CoinController {
     }
 
     // Kursverlauf eines Coins abrufen
+
     @GetMapping("/{id}/history")
-    public String getCoinHistory(@Parameter(description = "Coin ID") @PathVariable Long id) {
-        return coinService.getCoinHistory(id);
+    @Operation(summary = "Kursverlauf eines Coins abrufen")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coin history as JSON", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CoinPriceHistory.class))))
+    })
+    public List<CoinPriceHistory> getCoinHistory(@Parameter(description = "Coin ID") @PathVariable Integer id,
+            @Parameter(description = "Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX)") @RequestParam(defaultValue = "DAYS_30") TimeInterval interval) {
+        return coinService.getCoinHistory(id, interval);
     }
 
     // Aktuellen Kurs eines Coins abrufen

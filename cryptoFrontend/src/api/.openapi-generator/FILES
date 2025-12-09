@@ -1,11 +1,16 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 api.ts
 base.ts
 common.ts
 configuration.ts
+docs/AuthControllerApi.md
+docs/AuthRequest.md
+docs/AuthResponse.md
 docs/Coin.md
 docs/CoinControllerApi.md
+docs/CoinPriceHistory.md
+docs/CoinPriceHistoryId.md
+docs/RefreshTokenRequest.md
 git_push.sh
 index.ts

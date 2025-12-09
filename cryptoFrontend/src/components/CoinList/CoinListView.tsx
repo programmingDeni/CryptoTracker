@@ -69,22 +69,17 @@ export default function CoinListView({ onSelectCoin }: CoinListViewProps) {
 
   return (
     <div style={{ paddingLeft: "40px", paddingRight: "40px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      <div className="row">
         <CoinListSearch search={search} onSearch={setSearch} />
         <div style={{ position: "relative" }}>
           <button
             onClick={() => setShowSortMenu((v) => !v)}
+            className="btn btn--primary"
             style={{
               height: "40px",
               width: "40px",
-              border: "none",
-              background: "#32267aff",
               borderRadius: "4px",
               cursor: "pointer",
-              fontSize: "1.5rem",
-              justifyContent: "center",
-              alignItems: "center",
-              display: "flex",
             }}
             title="Sortieren"
           >
@@ -98,7 +93,7 @@ export default function CoinListView({ onSelectCoin }: CoinListViewProps) {
                 top: "45px",
                 right: 0,
                 background: "#222",
-                color: "#fff",
+                color: "color--primary",
                 borderRadius: "8px",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                 zIndex: 10,

@@ -6,7 +6,7 @@ All URIs are relative to *http://localhost:8080*
 |------------- | ------------- | -------------|
 |[**addCoin**](#addcoin) | **POST** /api/coins | |
 |[**getCoinCurrent**](#getcoincurrent) | **GET** /api/coins/{id}/current | |
-|[**getCoinHistory**](#getcoinhistory) | **GET** /api/coins/{id}/history | |
+|[**getCoinHistory**](#getcoinhistory) | **GET** /api/coins/{id}/history | Kursverlauf eines Coins abrufen|
 |[**getCoins**](#getcoins) | **GET** /api/coins | |
 |[**getWatchlist**](#getwatchlist) | **GET** /api/coins/watchlist | |
 |[**removeCoin**](#removecoin) | **DELETE** /api/coins | |
@@ -113,7 +113,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getCoinHistory**
-> string getCoinHistory()
+> Array<CoinPriceHistory> getCoinHistory()
 
 
 ### Example
@@ -127,10 +127,12 @@ import {
 const configuration = new Configuration();
 const apiInstance = new CoinControllerApi(configuration);
 
-let id: string; //Coin ID (default to undefined)
+let id: number; //Coin ID (default to undefined)
+let interval: 'HOUR_1' | 'HOURS_24' | 'DAYS_7' | 'DAYS_30' | 'YEAR_1' | 'MAX'; //Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX) (optional) (default to 'DAYS_30')
 
 const { status, data } = await apiInstance.getCoinHistory(
-    id
+    id,
+    interval
 );
 ```
 
@@ -138,12 +140,13 @@ const { status, data } = await apiInstance.getCoinHistory(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **id** | [**string**] | Coin ID | defaults to undefined|
+| **id** | [**number**] | Coin ID | defaults to undefined|
+| **interval** | [**&#39;HOUR_1&#39; | &#39;HOURS_24&#39; | &#39;DAYS_7&#39; | &#39;DAYS_30&#39; | &#39;YEAR_1&#39; | &#39;MAX&#39;**]**Array<&#39;HOUR_1&#39; &#124; &#39;HOURS_24&#39; &#124; &#39;DAYS_7&#39; &#124; &#39;DAYS_30&#39; &#124; &#39;YEAR_1&#39; &#124; &#39;MAX&#39;>** | Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX) | (optional) defaults to 'DAYS_30'|
 
 
 ### Return type
 
-**string**
+**Array<CoinPriceHistory>**
 
 ### Authorization
 
@@ -152,13 +155,13 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | OK |  -  |
+|**200** | Coin history as JSON |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

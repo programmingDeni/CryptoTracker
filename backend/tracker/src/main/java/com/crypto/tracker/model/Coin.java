@@ -2,6 +2,10 @@ package com.crypto.tracker.model;
 
 //java 
 import java.math.BigDecimal;
+
+import com.crypto.tracker.security.UserFeature.UserOwned;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +16,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class Coin {
+public class Coin implements UserOwned {
 
     /*
      * Bekomme von CoinGeckoDto die folgenden Felder:
@@ -29,8 +33,9 @@ public class Coin {
     // ID ist nur meine Locale Id um Coins eindeutig zu persistieren
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     // Symbol ist die "ID" von CoinGecko, e.g. "btc","eth"
+    private String coinGeckoIdString;
     private String symbol;
     private String name;
     private String image;
@@ -39,12 +44,19 @@ public class Coin {
     private BigDecimal priceChange24hPerCent;
     private BigDecimal ath;
 
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
     // Construktoren (braucht glaub JPA)
     public Coin() {
     }
 
-    public Coin(String symbol, String name, String image, BigDecimal currentPrice, BigDecimal marketCap,
+    public Coin(String coinGeckoIdString, Integer userId,
+            String symbol, String name, String image,
+            BigDecimal currentPrice, BigDecimal marketCap,
             BigDecimal priceChange24hPerCent, BigDecimal ath) {
+        this.coinGeckoIdString = coinGeckoIdString;
+        this.userId = userId;
         this.symbol = symbol;
         this.name = name;
         this.image = image;
@@ -83,4 +95,12 @@ public class Coin {
         this.ath = ath;
     }
 
+    public void setCoinGeckoIdString(String coinGeckoIdString) {
+        this.coinGeckoIdString = coinGeckoIdString;
+    }
+
+    @Override
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }
