@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **number** |  | [optional] [default to undefined]
+**coinGeckoIdString** | **string** |  | [optional] [default to undefined]
 **symbol** | **string** |  | [optional] [default to undefined]
 **name** | **string** |  | [optional] [default to undefined]
 **image** | **string** |  | [optional] [default to undefined]
@@ -13,6 +14,7 @@ Name | Type | Description | Notes
 **marketCap** | **number** |  | [optional] [default to undefined]
 **priceChange24hPerCent** | **number** |  | [optional] [default to undefined]
 **ath** | **number** |  | [optional] [default to undefined]
+**userId** | **number** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -21,6 +23,7 @@ import { Coin } from './api';
 
 const instance: Coin = {
     id,
+    coinGeckoIdString,
     symbol,
     name,
     image,
@@ -28,6 +31,7 @@ const instance: Coin = {
     marketCap,
     priceChange24hPerCent,
     ath,
+    userId,
 };
 ```
 

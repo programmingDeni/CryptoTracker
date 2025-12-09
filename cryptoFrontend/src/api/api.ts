@@ -26,6 +26,56 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AuthRequest
+ */
+export interface AuthRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthRequest
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthRequest
+     */
+    'password'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface AuthResponse
+ */
+export interface AuthResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthResponse
+     */
+    'accessToken'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthResponse
+     */
+    'refreshToken'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthResponse
+     */
+    'userId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthResponse
+     */
+    'email'?: string;
+}
+/**
+ * 
+ * @export
  * @interface Coin
  */
 export interface Coin {
@@ -35,6 +85,12 @@ export interface Coin {
      * @memberof Coin
      */
     'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Coin
+     */
+    'coinGeckoIdString'?: string;
     /**
      * 
      * @type {string}
@@ -77,6 +133,12 @@ export interface Coin {
      * @memberof Coin
      */
     'ath'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Coin
+     */
+    'userId'?: number;
 }
 /**
  * 
@@ -86,22 +148,16 @@ export interface Coin {
 export interface CoinPriceHistory {
     /**
      * 
-     * @type {number}
+     * @type {CoinPriceHistoryId}
      * @memberof CoinPriceHistory
      */
-    'id'?: number;
+    'id'?: CoinPriceHistoryId;
     /**
      * 
      * @type {string}
      * @memberof CoinPriceHistory
      */
     'symbol'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof CoinPriceHistory
-     */
-    'timestamp'?: number;
     /**
      * 
      * @type {number}
@@ -125,6 +181,12 @@ export interface CoinPriceHistory {
      * @type {number}
      * @memberof CoinPriceHistory
      */
+    'timestamp'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistory
+     */
     'marketCap'?: number;
     /**
      * 
@@ -133,6 +195,336 @@ export interface CoinPriceHistory {
      */
     'totalVolume'?: number;
 }
+/**
+ * 
+ * @export
+ * @interface CoinPriceHistoryId
+ */
+export interface CoinPriceHistoryId {
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistoryId
+     */
+    'coinId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CoinPriceHistoryId
+     */
+    'timestamp'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface RefreshTokenRequest
+ */
+export interface RefreshTokenRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof RefreshTokenRequest
+     */
+    'refreshToken'?: string;
+}
+
+/**
+ * AuthControllerApi - axios parameter creator
+ * @export
+ */
+export const AuthControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AuthRequest} authRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login: async (authRequest: AuthRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authRequest' is not null or undefined
+            assertParamExists('login', 'authRequest', authRequest)
+            const localVarPath = `/api/auth/login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(authRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {RefreshTokenRequest} refreshTokenRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refresh: async (refreshTokenRequest: RefreshTokenRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'refreshTokenRequest' is not null or undefined
+            assertParamExists('refresh', 'refreshTokenRequest', refreshTokenRequest)
+            const localVarPath = `/api/auth/refresh`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(refreshTokenRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AuthRequest} authRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        register: async (authRequest: AuthRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authRequest' is not null or undefined
+            assertParamExists('register', 'authRequest', authRequest)
+            const localVarPath = `/api/auth/register`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(authRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AuthControllerApi - functional programming interface
+ * @export
+ */
+export const AuthControllerApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthControllerApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCurrentUser(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentUser(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.getCurrentUser']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AuthRequest} authRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async login(authRequest: AuthRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.login(authRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.login']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {RefreshTokenRequest} refreshTokenRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async refresh(refreshTokenRequest: RefreshTokenRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refresh(refreshTokenRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.refresh']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AuthRequest} authRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async register(authRequest: AuthRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.register(authRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthControllerApi.register']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AuthControllerApi - factory interface
+ * @export
+ */
+export const AuthControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthControllerApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentUser(options?: RawAxiosRequestConfig): AxiosPromise<AuthResponse> {
+            return localVarFp.getCurrentUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AuthRequest} authRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login(authRequest: AuthRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthResponse> {
+            return localVarFp.login(authRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RefreshTokenRequest} refreshTokenRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refresh(refreshTokenRequest: RefreshTokenRequest, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.refresh(refreshTokenRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AuthRequest} authRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        register(authRequest: AuthRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthResponse> {
+            return localVarFp.register(authRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AuthControllerApi - object-oriented interface
+ * @export
+ * @class AuthControllerApi
+ * @extends {BaseAPI}
+ */
+export class AuthControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthControllerApi
+     */
+    public getCurrentUser(options?: RawAxiosRequestConfig) {
+        return AuthControllerApiFp(this.configuration).getCurrentUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AuthRequest} authRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthControllerApi
+     */
+    public login(authRequest: AuthRequest, options?: RawAxiosRequestConfig) {
+        return AuthControllerApiFp(this.configuration).login(authRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RefreshTokenRequest} refreshTokenRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthControllerApi
+     */
+    public refresh(refreshTokenRequest: RefreshTokenRequest, options?: RawAxiosRequestConfig) {
+        return AuthControllerApiFp(this.configuration).refresh(refreshTokenRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AuthRequest} authRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthControllerApi
+     */
+    public register(authRequest: AuthRequest, options?: RawAxiosRequestConfig) {
+        return AuthControllerApiFp(this.configuration).register(authRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
 
 /**
  * CoinControllerApi - axios parameter creator
@@ -212,10 +604,11 @@ export const CoinControllerApiAxiosParamCreator = function (configuration?: Conf
          * 
          * @summary Kursverlauf eines Coins abrufen
          * @param {number} id Coin ID
+         * @param {GetCoinHistoryIntervalEnum} [interval] Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoinHistory: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCoinHistory: async (id: number, interval?: GetCoinHistoryIntervalEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getCoinHistory', 'id', id)
             const localVarPath = `/api/coins/{id}/history`
@@ -230,6 +623,10 @@ export const CoinControllerApiAxiosParamCreator = function (configuration?: Conf
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (interval !== undefined) {
+                localVarQueryParameter['interval'] = interval;
+            }
 
 
     
@@ -367,11 +764,12 @@ export const CoinControllerApiFp = function(configuration?: Configuration) {
          * 
          * @summary Kursverlauf eines Coins abrufen
          * @param {number} id Coin ID
+         * @param {GetCoinHistoryIntervalEnum} [interval] Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCoinHistory(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CoinPriceHistory>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCoinHistory(id, options);
+        async getCoinHistory(id: number, interval?: GetCoinHistoryIntervalEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CoinPriceHistory>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCoinHistory(id, interval, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CoinControllerApi.getCoinHistory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -441,11 +839,12 @@ export const CoinControllerApiFactory = function (configuration?: Configuration,
          * 
          * @summary Kursverlauf eines Coins abrufen
          * @param {number} id Coin ID
+         * @param {GetCoinHistoryIntervalEnum} [interval] Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoinHistory(id: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<CoinPriceHistory>> {
-            return localVarFp.getCoinHistory(id, options).then((request) => request(axios, basePath));
+        getCoinHistory(id: number, interval?: GetCoinHistoryIntervalEnum, options?: RawAxiosRequestConfig): AxiosPromise<Array<CoinPriceHistory>> {
+            return localVarFp.getCoinHistory(id, interval, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -507,12 +906,13 @@ export class CoinControllerApi extends BaseAPI {
      * 
      * @summary Kursverlauf eines Coins abrufen
      * @param {number} id Coin ID
+     * @param {GetCoinHistoryIntervalEnum} [interval] Zeitintervall (HOUR_1, HOURS_24, DAYS_7, DAYS_30, YEAR_1, MAX)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoinControllerApi
      */
-    public getCoinHistory(id: number, options?: RawAxiosRequestConfig) {
-        return CoinControllerApiFp(this.configuration).getCoinHistory(id, options).then((request) => request(this.axios, this.basePath));
+    public getCoinHistory(id: number, interval?: GetCoinHistoryIntervalEnum, options?: RawAxiosRequestConfig) {
+        return CoinControllerApiFp(this.configuration).getCoinHistory(id, interval, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -546,5 +946,17 @@ export class CoinControllerApi extends BaseAPI {
     }
 }
 
+/**
+ * @export
+ */
+export const GetCoinHistoryIntervalEnum = {
+    Hour1: 'HOUR_1',
+    Hours24: 'HOURS_24',
+    Days7: 'DAYS_7',
+    Days30: 'DAYS_30',
+    Year1: 'YEAR_1',
+    Max: 'MAX'
+} as const;
+export type GetCoinHistoryIntervalEnum = typeof GetCoinHistoryIntervalEnum[keyof typeof GetCoinHistoryIntervalEnum];
 
 

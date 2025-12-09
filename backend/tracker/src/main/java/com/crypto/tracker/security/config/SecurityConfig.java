@@ -36,6 +36,8 @@ public class SecurityConfig {
                         // Öffentliche Endpoints (ohne Token zugänglich)
                         .requestMatchers("/api/auth/**").permitAll() // Login, Register, etc.
                         .requestMatchers("/error").permitAll() // Spring Error Page
+                        // OpenAPI/Swagger Endpoints erlauben
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                         // Alle anderen Endpoints benötigen Authentication
                         .anyRequest().authenticated())

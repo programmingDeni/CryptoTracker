@@ -6,13 +6,14 @@ import type { CoinPriceHistory } from "../api";
 
 //Service imports
 import { getCoinPriceHistoryService } from "../services/coinPriceHistoryService";
+import type { TimeInterval } from "../types/timeIntervalLables";
 
-export function useCoinPriceHistory(coinId: number) {
+export function useCoinPriceHistory(
+  coinId: number,
+  timeInterval: TimeInterval = "DAYS_30"
+) {
   return useQuery<CoinPriceHistory[]>({
-    queryKey: ["coinPriceHistories", coinId],
-    queryFn: ({ queryKey }) => {
-      const [, coinId] = queryKey; // <--- coinId extrahieren
-      return getCoinPriceHistoryService(coinId as number);
-    },
+    queryKey: ["coinPriceHistories", coinId, timeInterval],
+    queryFn: () => getCoinPriceHistoryService(coinId, timeInterval),
   });
 }

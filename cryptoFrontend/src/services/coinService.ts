@@ -1,15 +1,14 @@
-//import axios from "./axios";
-
-//import type { Coin } from "../types/Coin";
-
 import { CoinControllerApi } from "../api";
 import type { Coin } from "../api";
 import { apiConfig } from "../api/apiConfig";
+import axiosInstance from "./axios";
+
+// API einmal mit deiner axios-Instanz erstellen
+const coinApi = new CoinControllerApi(apiConfig, undefined, axiosInstance);
 
 export async function getCoinsService(): Promise<Coin[]> {
   try {
-    const api = new CoinControllerApi(apiConfig);
-    const response = await api.getCoins();
+    const response = await coinApi.getCoins();
     return response.data;
   } catch (error) {
     console.log("coinService.ts error: ", error);
